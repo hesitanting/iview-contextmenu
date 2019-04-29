@@ -1,6 +1,6 @@
 # iview-contextmenu
 
-![version](https://img.shields.io/github/package-json/v/qmhc/iview-contextmenu.svg)
+[![version](https://img.shields.io/github/package-json/v/qmhc/iview-contextmenu.svg)](https://github.com/qmhc/iview-contextmenu)
 [![NPM download](https://img.shields.io/npm/v/iview-contextmenu.svg)](https://www.npmjs.com/package/iview-contextmenu)
 [![license](https://img.shields.io/github/license/qmhc/iview-contextmenu.svg)](http://opensource.org/licenses/MIT)
 
@@ -10,7 +10,7 @@
 
 ![demo](./public/demo.gif)
 
-[Engilsh](./README.md) | **中文**
+[Engilsh](https://github.com/qmhc/iview-contextmenu) | **中文**
 
 ## 安装
 
@@ -21,10 +21,27 @@ npm install iview-contextmenu
 
 ## 用法
 
-一个简单的例子:
+main.js:
+```js
+import Vue from 'vue'
+import iView from 'iview'
+import Contextmenu from 'iview-contextmenu'
+
+import 'iview/dist/styles/iview.css'
+import 'iview-contextmenu/dist/iview-contextmenu.css'
+
+Vue.use(iView)
+Vue.use(Contextmenu)
+```
+
+App.vue:
 ```vue
 <template>
-  <div @contextmenu.prevent="preventContextmenu">
+  <div
+    id="app"
+    @contextmenu.prevent="preventContextmenu"
+  >
+    <!-- 在没使用trigger = 'custom'时, 组件会响应document的菜单事件 -->
     <Contextmenu
       :menu-data="menuData"
       @on-select="handleSelect"
@@ -34,14 +51,8 @@ npm install iview-contextmenu
 </template>
 
 <script>
-import Contextmenu from 'iview-contextmenu'
-import 'iview-contextmenu/dist/iview-contextmenu.css'
-
 export default {
-  name: 'app',
-  components: {
-    Contextmenu
-  },
+  name: 'App',
   data () {
     return {
       menuData: [
@@ -76,6 +87,21 @@ export default {
   }
 }
 </script>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+}
+body {
+  overflow: hidden;
+}
+#app {
+  height: 100%;
+}
+</style>
 ```
 
 ## 属性
@@ -84,7 +110,7 @@ export default {
 |---|---|---|---|
 |menu-data|一个包含菜单数据的数组|Array|-|
 |trigger|设置为 `'custom'` 时结合可以手动控制显示状态|String|''|
-|visible|手动控制右键菜单的显示状态, 在设置 trigger = 'custom' 时使用|Boolean|false|
+|visible|手动控制右键菜单的显示状态, 在设置 `trigger = 'custom'` 时使用|Boolean|false|
 
 ## 事件
 
@@ -106,7 +132,7 @@ export default {
 |shortcut|右侧显示的文字, 若设置了 icon 或存在子级菜单, 则会被忽略|String|-|
 |children|该项的子级菜单|Array|-|
 |prefix|该项的前缀名, 选取子级菜单时会拼接在其 name 值前, 若不设置则默认使用该项 name 值|String|-|
-## License
+## 授权
 
 [MIT](http://opensource.org/licenses/MIT)
 

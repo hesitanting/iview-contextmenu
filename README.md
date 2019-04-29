@@ -1,6 +1,6 @@
 # iview-contextmenu
 
-![version](https://img.shields.io/github/package-json/v/qmhc/iview-contextmenu.svg)
+[![version](https://img.shields.io/github/package-json/v/qmhc/iview-contextmenu.svg)](https://github.com/qmhc/iview-contextmenu)
 [![NPM download](https://img.shields.io/npm/v/iview-contextmenu.svg)](https://www.npmjs.com/package/iview-contextmenu)
 [![license](https://img.shields.io/github/license/qmhc/iview-contextmenu.svg)](http://opensource.org/licenses/MIT)
 
@@ -21,10 +21,27 @@ npm install iview-contextmenu
 
 ## Usage
 
-A simple Example:
+main.js:
+```js
+import Vue from 'vue'
+import iView from 'iview'
+import Contextmenu from 'iview-contextmenu'
+
+import 'iview/dist/styles/iview.css'
+import 'iview-contextmenu/dist/iview-contextmenu.css'
+
+Vue.use(iView)
+Vue.use(Contextmenu)
+```
+
+App.vue:
 ```vue
 <template>
-  <div @contextmenu.prevent="preventContextmenu">
+  <div
+    id="app"
+    @contextmenu.prevent="preventContextmenu"
+  >
+    <!-- It will respond to document contextmenu event when no set trigger = 'custom'  -->
     <Contextmenu
       :menu-data="menuData"
       @on-select="handleSelect"
@@ -34,14 +51,8 @@ A simple Example:
 </template>
 
 <script>
-import Contextmenu from 'iview-contextmenu'
-import 'iview-contextmenu/dist/iview-contextmenu.css'
-
 export default {
-  name: 'app',
-  components: {
-    Contextmenu
-  },
+  name: 'App',
   data () {
     return {
       menuData: [
@@ -76,6 +87,21 @@ export default {
   }
 }
 </script>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+}
+body {
+  overflow: hidden;
+}
+#app {
+  height: 100%;
+}
+</style>
 ```
 
 ## Props
@@ -84,7 +110,7 @@ export default {
 |---|---|---|---|
 |menu-data|An Array that generates the contextmenu.|Array|-|
 |trigger|Set to `'custom'` to control visible manually.|String|''|
-|visible|Control the display of Contextmenu manually, used when trigger = 'custom'.|Boolean|false|
+|visible|Control the display of Contextmenu manually, used when `trigger = 'custom'`.|Boolean|false|
 
 ## Events
 
@@ -103,9 +129,9 @@ export default {
 |divided|Show spilt line.|Boolean|false|
 |desabled|Used to disable the item.|Boolean|false|
 |icon|Right icon Type, it will be ignored when item has children.|String|-|
-|shortcut|Right text content, it wiil be ignored when 'icon' is set or the 'children' is not null.|String|-|
+|shortcut|Right text content, it wiil be ignored when right icon is set or item has children.|String|-|
 |children|The son item|Array|-|
-|prefix|Tag the children name when to select item's children.|String|-|
+|prefix|Prefix the children name when to select item's children.|String|-|
 
 ## License
 
