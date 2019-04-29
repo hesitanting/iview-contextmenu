@@ -1,28 +1,115 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div
+    id="app"
+    @contextmenu.prevent="preventContextmenu"
+  >
+    <Contextmenu
+      :menu-data="menuData"
+      @on-select="handleSelect"
+      @on-cancel="handleCancel"
+    ></Contextmenu>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Contextmenu from './components/Contextmenu'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    Contextmenu
+  },
+  data () {
+    return {
+      menuData: [
+        {
+          title: '菜单1',
+          name: 'menu1'
+        },
+        {
+          title: '菜单2',
+          name: 'menu2',
+          shortcut: 'Ctrl+J'
+        },
+        {
+          title: '菜单3',
+          name: 'menu3',
+          divided: true,
+          disabled: true
+        },
+        {
+          title: '菜单4',
+          name: 'menu4',
+          children: [
+            {
+              title: '子菜单1',
+              name: 'sonMenu1',
+              icon: 'md-checkmark'
+            },
+            {
+              title: '子菜单2',
+              name: 'sonMenu2'
+            },
+            {
+              title: '更多',
+              name: 'more',
+              divided: true,
+              children: [
+                {
+                  title: '子菜单3',
+                  name: 'sonMenu3'
+                },
+                {
+                  title: '子菜单4',
+                  name: 'sonMenu4'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          title: '菜单5',
+          name: 'menu5',
+          disabled: true,
+          children: [
+            {
+              title: '子菜单5',
+              name: 'sonMenu5'
+            }
+          ]
+        }
+      ]
+    }
+  },
+  methods: {
+    handleSelect (name) {
+      console.log(`select contextmenu: ${name}`)
+    },
+    handleCancel () {
+      console.log('cancel contextmenu')
+    },
+    preventContextmenu () {
+      return false
+    }
   }
 }
 </script>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+}
+body {
+  overflow: hidden;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  height: 100%;
 }
 </style>

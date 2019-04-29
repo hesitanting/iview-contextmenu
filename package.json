@@ -1,16 +1,12 @@
 {
-  "name": "iview-contextmenu",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+  "author": {
+    "name": "qmhc"
   },
   "dependencies": {
     "core-js": "^2.6.5",
     "vue": "^2.6.10"
   },
+  "description": "A contextmenu component depend on iview-dropdown component",
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.1",
     "@vue/cli-plugin-eslint": "^3.0.1",
@@ -19,6 +15,33 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "iview": "^3.4.1",
+    "iview-loader": "^1.2.2",
     "vue-template-compiler": "^2.5.21"
-  }
+  },
+  "engines": {
+    "node": ">=8.9.1",
+    "npm": ">=5.5.1",
+    "yarn": ">=1.3.2"
+  },
+  "keywords": [
+    "iview",
+    "vue",
+    "vue.js",
+    "component",
+    "components",
+    "ui",
+    "contextmenu"
+  ],
+  "license": "MIT",
+  "main": "dist/iview-contextmenu.umd.min.js",
+  "name": "iview-contextmenu",
+  "private": false,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "lib": "vue-cli-service build --target lib --name iview-contextmenu src/index.js"
+  },
+  "version": "0.1.0"
 }
