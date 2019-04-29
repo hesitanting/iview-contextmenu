@@ -41,7 +41,7 @@ App.vue:
     id="app"
     @contextmenu.prevent="preventContextmenu"
   >
-    <!-- It will respond to document contextmenu event when no set trigger = 'custom'  -->
+    <!-- It will respond to document contextmenu event when no set trigger = 'custom' -->
     <Contextmenu
       :menu-data="menuData"
       @on-select="handleSelect"
@@ -131,7 +131,7 @@ body {
 |icon|Right icon Type, it will be ignored when item has children.|String|-|
 |shortcut|Right text content, it wiil be ignored when right icon is set or item has children.|String|-|
 |children|The son item|Array|-|
-|prefix|Prefix the children name when to select item's children.|String|-|
+|prefix|Prefix the children name when to select item's children, default used name value when no set|String|-|
 
 ## License
 
