@@ -23,10 +23,22 @@
           :data="item"
           :item-class="itemClass"
           :prefix="item.prefix || item.name"
+          :render="render"
           @mouseenter.native="handleMouseEnter(item.name)"
         >
           <template #item="{ data }">
-            <slot name="item" :data="data"></slot>
+            <slot name="item" :data="data">
+              <RenderItem
+                v-if="data.render"
+                :data="data"
+                :render="data.render"
+              ></RenderItem>
+              <RenderItem
+                v-else-if="rootRender"
+                :data="data"
+                :render="rootRender"
+              ></RenderItem>
+            </slot>
           </template>
         </ContextmenuItem>
       </template>
@@ -36,15 +48,14 @@
 
 <script>
 import ContextmenuItem from './ContextmenuItem'
+import RenderItem from './RenderItem'
 import deepClone from '@/utils/deepClone'
 
 const prefixCls = 'ivu-contextmenu'
 
 export default {
   name: 'Contextmenu',
-  components: {
-    ContextmenuItem
-  },
+  components: { ContextmenuItem, RenderItem },
   props: {
     menuData: {
       type: Array,
@@ -60,6 +71,9 @@ export default {
     },
     itemClass: {
       type: String
+    },
+    render: {
+      type: Function
     }
   },
   data () {
@@ -75,6 +89,9 @@ export default {
   computed: {
     localMenuData () {
       return deepClone(this.menuData)
+    },
+    rootRender () {
+      return this.render || null
     }
   },
   watch: {

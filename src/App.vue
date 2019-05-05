@@ -4,16 +4,28 @@
     @contextmenu.prevent="preventContextmenu"
   >
     <Contextmenu
-      :menu-data="menuData"
       item-class="my-item"
+      :menu-data="menuData"
+      :render="rootRender"
       @on-select="handleSelect"
       @on-cancel="handleCancel"
     >
-      <!-- <template #item="{ data }">
-        <span class="flex-item" :style="{color: 'red'}">
+      <template #item="{ data }">
+        <span
+          class="ivu-contextmenu-item-flex"
+          :style="{color: data.disabled ? 'gary' : 'red'}"
+        >
           {{ data.title }}
+          <Icon
+            v-if="data.children && data.children.length"
+            type="ios-arrow-forward"
+          ></Icon>
+          <Icon
+            v-if="data.icon"
+            :type="data.icon"
+          ></Icon>
         </span>
-      </template> -->
+      </template>
     </Contextmenu>
   </div>
 </template>
@@ -31,7 +43,10 @@ export default {
       menuData: [
         {
           title: '菜单1',
-          name: 'menu1'
+          name: 'menu1',
+          render: (h, data) => {
+            return h('span', [ data.title ])
+          }
         },
         {
           title: '菜单2',
@@ -97,6 +112,9 @@ export default {
     },
     preventContextmenu () {
       return false
+    },
+    rootRender (h, data) {
+      return h('span', [ data.title ])
     }
   }
 }

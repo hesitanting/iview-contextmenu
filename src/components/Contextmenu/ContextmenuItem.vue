@@ -34,7 +34,18 @@
           @mouseenter.native="handleMouseEnter(item.name)"
         >
           <template #item="{ data }">
-            <slot name="item" :data="data"></slot>
+            <slot name="item" :data="data">
+              <RenderItem
+                v-if="data.render"
+                :data="data"
+                :render="data.render"
+              ></RenderItem>
+              <RenderItem
+                v-else-if="rootRender"
+                :data="data"
+                :render="rootRender"
+              ></RenderItem>
+            </slot>
           </template>
         </ContextMenuItem>
       </template>
@@ -71,10 +82,13 @@
 </template>
 
 <script>
+import RenderItem from './RenderItem'
+
 const prefixCls = 'ivu-contextmenu'
 
 export default {
   name: 'ContextMenuItem',
+  components: { RenderItem },
   props: {
     data: {
       type: Object,
@@ -95,6 +109,9 @@ export default {
     itemClass: {
       type: String,
       default: ''
+    },
+    render: {
+      type: Function
     }
   },
   data () {
@@ -117,6 +134,9 @@ export default {
         [`${prefixCls}-item-expand`]: this.expand,
         [this.itemClass]: this.itemClass
       }
+    },
+    rootRender () {
+      return this.render || null
     }
   },
   watch: {
