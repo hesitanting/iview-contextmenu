@@ -5,9 +5,16 @@
   >
     <Contextmenu
       :menu-data="menuData"
+      item-class="my-item"
       @on-select="handleSelect"
       @on-cancel="handleCancel"
-    ></Contextmenu>
+    >
+      <!-- <template #item="{ data }">
+        <span class="flex-item" :style="{color: 'red'}">
+          {{ data.title }}
+        </span>
+      </template> -->
+    </Contextmenu>
   </div>
 </template>
 

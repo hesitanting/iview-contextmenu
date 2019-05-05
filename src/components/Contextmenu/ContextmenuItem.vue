@@ -3,7 +3,7 @@
     v-if="hasChildren && !data.disabled"
     transfer
     trigger="custom"
-    transfer-class-name="contextmenu-list"
+    :transfer-class-name="`${prefixCls}-list`"
     placement="right-start"
     :visible="currentVisible"
     @on-clickoutside="handleCancel"
@@ -11,56 +11,68 @@
     <DropdownItem
       :name="data.name"
       :divided="data.divided"
-      :class="itemClass"
+      :class="className"
       @click.native.prevent.stop
     >
-      <span class="flex-item">
-        {{ data.title }}
-        <Icon type="ios-arrow-forward"></Icon>
-      </span>
+      <slot name="item" :data="data">
+        <span :class="`${prefixCls}-item-flex`">
+          {{ data.title }}
+          <Icon type="ios-arrow-forward"></Icon>
+        </span>
+      </slot>
     </DropdownItem>
     <DropdownMenu slot="list">
       <template v-for="(item, index) in children">
         <ContextMenuItem
           v-if="item.visible !== false"
           :key="index"
-          :item-class="enterItem === item.name ? 'expand' : ''"
+          :expand="enterItem === item.name"
           :data="item"
+          :item-class="itemClass"
           :prefix="`${prefixName}-${item.prefix || item.name}`"
           :visible="enterItem === item.name"
           @mouseenter.native="handleMouseEnter(item.name)"
-        ></ContextMenuItem>
+        >
+          <template #item="{ data }">
+            <slot name="item" :data="data"></slot>
+          </template>
+        </ContextMenuItem>
       </template>
     </DropdownMenu>
   </Dropdown>
   <DropdownItem
     v-else
     :name="data.name"
+    :class="className"
     :disabled="data.disabled"
     :divided="data.divided"
     @click.native="handleSelect"
   >
-    <span class="flex-item">
-      {{ data.title }}
-      <Icon
-        v-if="hasChildren"
-        type="ios-arrow-forward"
-      ></Icon>
-      <Icon
-        v-else-if="data.icon"
-        :type="data.icon"
-      ></Icon>
-      <span
-        v-else
-        style="color: #808695"
-      >
-        {{ data.shortcut }}
+    <slot name="item" :data="data">
+      <span :class="`${prefixCls}-item-flex`">
+        {{ data.title }}
+        <Icon
+          v-if="hasChildren"
+          type="ios-arrow-forward"
+        ></Icon>
+        <Icon
+          v-else-if="data.icon"
+          :type="data.icon"
+        ></Icon>
+        <span
+          v-else
+          style="color: #808695"
+        >
+          {{ data.shortcut }}
+        </span>
       </span>
-    </span>
+    </slot>
   </DropdownItem>
 </template>
 
 <script>
+const prefixCls = 'ivu-contextmenu'
+
 export default {
   name: 'ContextMenuItem',
   props: {
@@ -70,9 +82,13 @@ export default {
     },
     prefix: {
       type: String,
-      required: true
+      default: ''
     },
     visible: {
+      type: Boolean,
+      default: false
+    },
+    expand: {
       type: Boolean,
       default: false
     },
@@ -83,9 +99,10 @@ export default {
   },
   data () {
     return {
+      prefixCls,
       currentVisible: this.visible,
       enterItem: '',
-      prefixName: this.prefix
+      prefixName: this.prefix || this.data.name
     }
   },
   computed: {
@@ -95,8 +112,11 @@ export default {
     hasChildren () {
       return !!(this.children && this.children.length)
     },
-    trigger () {
-      return this.data.trigger || 'hover'
+    className () {
+      return {
+        [`${prefixCls}-item-expand`]: this.expand,
+        [this.itemClass]: this.itemClass
+      }
     }
   },
   watch: {
@@ -105,6 +125,9 @@ export default {
       if (!value) {
         this.enterItem = ''
       }
+    },
+    currentVisible (value) {
+      this.$emit('on-toggle', value)
     }
   },
   methods: {
@@ -129,7 +152,9 @@ export default {
     },
     handleSelect () {
       this.enterItem = ''
-      this.dispatch('Contextmenu', 'on-select-item', this.prefixName)
+      if (this.data.visible && !this.data.disabled) {
+        this.dispatch('Contextmenu', 'on-select-item', this.prefixName)
+      }
     },
     handleCancel () {
       this.enterItem = ''

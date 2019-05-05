@@ -1,8 +1,8 @@
 <template>
   <Dropdown
     transfer
-    class="contextmenu"
-    transfer-class-name="contextmenu-list"
+    :class="[prefixCls]"
+    :transfer-class-name="`${prefixCls}-list`"
     ref="contextMenu"
     placement="right-start"
     trigger="custom"
@@ -18,12 +18,17 @@
         <ContextmenuItem
           v-if="item.visible !== false"
           :key="index"
-          :item-class="enterItem === item.name ? 'expand' : ''"
+          :expand="enterItem === item.name"
           :visible="enterItem === item.name"
           :data="item"
+          :item-class="itemClass"
           :prefix="item.prefix || item.name"
           @mouseenter.native="handleMouseEnter(item.name)"
-        ></ContextmenuItem>
+        >
+          <template #item="{ data }">
+            <slot name="item" :data="data"></slot>
+          </template>
+        </ContextmenuItem>
       </template>
     </DropdownMenu>
   </Dropdown>
@@ -32,6 +37,8 @@
 <script>
 import ContextmenuItem from './ContextmenuItem'
 import deepClone from '@/utils/deepClone'
+
+const prefixCls = 'ivu-contextmenu'
 
 export default {
   name: 'Contextmenu',
@@ -50,10 +57,14 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    },
+    itemClass: {
+      type: String
     }
   },
   data () {
     return {
+      prefixCls,
       locator: null,
       enterItem: '',
       currentVisible: this.visible,
@@ -133,22 +144,22 @@ export default {
 </script>
 
 <style>
-.contextmenu {
+.ivu-contextmenu {
   display: none;
 }
-.contextmenu-list {
+.ivu-contextmenu-list {
   max-height: none;
 }
-.contextmenu-list .expand {
+.ivu-contextmenu-list .ivu-contextmenu-item-expand {
   background: #f3f3f3;
 }
-.contextmenu-list .ivu-dropdown {
+.ivu-contextmenu-list .ivu-dropdown {
   width: 100%;
 }
-.contextmenu-list .ivu-dropdown-menu {
+.ivu-contextmenu-list .ivu-dropdown-menu {
   min-width: 140px;
 }
-.contextmenu-list .flex-item {
+.ivu-contextmenu-list .ivu-contextmenu-item-flex {
   display: flex;
   align-items: center;
   justify-content: space-between;
